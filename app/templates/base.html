@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MACUIN{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<base target="_blank">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">MACUIN</div>
+        <div class="user-info">
+            <span>Panel Interno</span>
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="{{ url_for('main.autopartes') }}" class="nav-item {% if active_view == 'autopartes' %}active{% endif %}">
+                <i class="fas fa-box"></i>
+                <span>Autopartes</span>
+            </a>
+            <a href="{{ url_for('main.inventario') }}" class="nav-item {% if active_view == 'inventario' %}active{% endif %}">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Inventario</span>
+            </a>
+            <a href="{{ url_for('main.reportes') }}" class="nav-item {% if active_view == 'reportes' %}active{% endif %}">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reportes</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

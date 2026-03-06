@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Inventario - MACUIN{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>Gestión de Inventario</h1>
+        <p>Monitoreo y actualización de stock de productos</p>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-info">
+            <p class="stat-label">Total de Artículos</p>
+            <p class="stat-value">{{ autopartes|length }}</p>
+        </div>
+        <div class="stat-icon icon-blue">
+            <i class="fas fa-chart-line"></i>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <p class="stat-label">Valor Total</p>
+            <p class="stat-value">${{ "%.2f"|format(total_valor) }}</p>
+        </div>
+        <div class="stat-icon icon-green">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <p class="stat-label">Stock Bajo</p>
+            <p class="stat-value">{{ bajo_stock|length }}</p>
+        </div>
+        <div class="stat-icon icon-red">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+    </div>
+</div>
+
+{% if bajo_stock %}
+<div class="alert alert-red">
+    <i class="fas fa-exclamation-circle"></i>
+    <strong>Atención:</strong> {{ bajo_stock|length }} productos con stock bajo (menos de 10 unidades).
+</div>
+{% endif %}
+
+<div class="search-box">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="search-input" placeholder="Buscar en inventario...">
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Valor Total</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in autopartes %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.categoria }}</td>
+                <td>${{ item.precio }}</td>
+                <td>{{ item.stock }}</td>
+                <td>${{ "%.2f"|format(item.precio * item.stock) }}</td>
+                <td>
+                    {% if item.stock == 0 %}
+                        <span class="badge badge-red">Sin Stock</span>
+                    {% elif item.stock < 10 %}
+                        <span class="badge badge-yellow">Bajo</span>
+                    {% else %}
+                        <span class="badge badge-green">Disponible</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,9 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Flask App</title>
-</head>
-<body>
-    <h1>Hola Flask</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Inicio - MACUIN{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Bienvenido a MACUIN</h1>
+    <p>Sistema de gestión de autopartes</p>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Autopartes</h3>
+            <span class="stat-number">{{ autopartes|length if autopartes else 0 }}</span>
+        </div>
+        <div class="stat-card">
+            <h3>Valor Total Inventario</h3>
+            <span class="stat-number">${{ "%.2f"|format(total_valor) if total_valor else "0.00" }}</span>
+        </div>
+        <div class="stat-card">
+            <h3>Bajo Stock</h3>
+            <span class="stat-number">{{ bajo_stock|length if bajo_stock else 0 }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

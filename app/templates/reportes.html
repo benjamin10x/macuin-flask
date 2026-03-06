@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Reportes y Estadísticas - MACUIN{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>Reportes y Estadísticas</h1>
+        <p>Análisis del inventario y productos</p>
+    </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <div class="kpi-icon icon-red-light">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+        <p class="kpi-label">Valor Total Inventario</p>
+        <p class="kpi-value">${{ "%.2f"|format(total_valor) }}</p>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <div class="kpi-icon icon-blue-light">
+                <i class="fas fa-box"></i>
+            </div>
+        </div>
+        <p class="kpi-label">Total Productos</p>
+        <p class="kpi-value">{{ autopartes|length }}</p>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <div class="kpi-icon icon-green-light">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+        </div>
+        <p class="kpi-label">Productos con Stock Bajo</p>
+        <p class="kpi-value">{{ bajo_stock|length }}</p>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="charts-section">
+    <div class="chart-container">
+        <h3>Distribución por Categoría</h3>
+        <canvas id="categoriaChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <h3>Productos con Stock Bajo</h3>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Stock Actual</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in bajo_stock %}
+                    <tr>
+                        <td>{{ item.nombre }}</td>
+                        <td>{{ item.categoria }}</td>
+                        <td>{{ item.stock }}</td>
+                        <td>${{ item.precio }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const categorias = {{ categorias | tojson | safe }};
+    const categoriaCounts = {{ categoria_counts | tojson | safe }};
+
+    const categoriaData = {
+        labels: categorias,
+        datasets: [{
+            data: categoriaCounts,
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+        }]
+    };
+
+    const ctx = document.getElementById('categoriaChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: categoriaData
+    });
+
+});
+</script>
+{% endblock %}
