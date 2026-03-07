@@ -16,8 +16,8 @@ def create_app():
     # IMPORTAR MODELOS
     from .models import Autoparte, Pedido
 
-    with app.app_context():
-        db.create_all()
+    # with app.app_context():
+    #     db.create_all()
 
     from .routes import main
     app.register_blueprint(main)

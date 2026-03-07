@@ -3,10 +3,10 @@ import json
 from datetime import date, datetime
 
 def get_all_autopartes():
-    return Autoparte.query.all()
+    return []
 
 def get_autoparte_by_id(id):
-    return Autoparte.query.get_or_404(id)
+    return []
 
 def create_autoparte(data):
     autoparte = Autoparte(
