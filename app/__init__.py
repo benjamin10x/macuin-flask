@@ -14,7 +14,7 @@ def create_app():
     csrf.init_app(app)
 
     # IMPORTAR MODELOS
-    from .models import Autoparte
+    from .models import Autoparte, Pedido
 
     with app.app_context():
         db.create_all()
