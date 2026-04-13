@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle del Pedido - MACUIN{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1>Detalle del Pedido</h1>
+        <p>{{ pedido.orden_id }} • {{ pedido.cliente }}</p>
+    </div>
+    <a href="{{ url_for('main.gestion_pedidos') }}" class="btn btn-secondary">Volver</a>
+</div>
+
+<div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px;">
+    <div class="stat-card">
+        <h3>Total</h3>
+        <span class="stat-number">${{ "%.2f"|format(pedido.total) }}</span>
+    </div>
+    <div class="stat-card">
+        <h3>Estado</h3>
+        <span class="stat-number">{{ pedido.estado }}</span>
+    </div>
+    <div class="stat-card">
+        <h3>Fecha</h3>
+        <span class="stat-number" style="font-size: 20px;">{{ pedido.fecha.strftime('%d/%m/%Y') if pedido.fecha else '' }}</span>
+    </div>
+</div>
+
+<div class="table-container" style="margin-bottom: 24px;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Autoparte</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Total Línea</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for articulo in pedido.articulos %}
+            <tr>
+                <td>{{ articulo.nombre }}</td>
+                <td>{{ articulo.cantidad }}</td>
+                <td>${{ "%.2f"|format(articulo.precio_unitario) }}</td>
+                <td>${{ "%.2f"|format(articulo.total_linea) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="form-container">
+    <form method="POST" action="{{ url_for('main.actualizar_estado_pedido', id=pedido.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+            <label for="estado">Estado del pedido</label>
+            <select id="estado" name="estado" class="form-control">
+                {% for estado in ['Recibido', 'Surtido', 'Enviado', 'Entregado', 'Cancelado'] %}
+                <option value="{{ estado }}" {% if pedido.estado == estado %}selected{% endif %}>{{ estado }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Dirección de envío</label>
+            <input type="text" class="form-control" value="{{ pedido.direccion_envio }}" readonly>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Actualizar estado</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

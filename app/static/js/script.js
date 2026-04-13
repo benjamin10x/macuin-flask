@@ -88,8 +88,29 @@ const commonOptions = {
     }
 };
 
+// Filtrado de tablas
+function initTableSearch() {
+    document.querySelectorAll('.search-input').forEach(function(input) {
+        var tableContainer = input.closest('.main-content') || document.body;
+        var table = tableContainer.querySelector('.data-table');
+        if (!table) return;
+
+        input.addEventListener('input', function() {
+            var query = this.value.trim().toLowerCase();
+            var rows = table.querySelectorAll('tbody tr');
+            rows.forEach(function(row) {
+                var text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    });
+}
+
 // Inicializar gráficos cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar filtrado de tablas
+    initTableSearch();
+
     // Gráfico de Ventas
     const ventasCtx = document.getElementById('ventasChart');
     if (ventasCtx) {

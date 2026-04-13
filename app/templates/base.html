@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<base target="_blank">
 </head>
 <body>
     <!-- Header -->
@@ -15,7 +14,12 @@
         <div class="logo">MACUIN</div>
         <div class="user-info">
             <span>Panel Interno</span>
-            <i class="fas fa-sign-out-alt"></i>
+            <form method="POST" action="{{ url_for('main.logout') }}" style="display: inline-flex;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" style="background: transparent; border: none; color: inherit;">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
         </div>
     </header>
 
@@ -43,6 +47,15 @@
 
     <!-- Main Content -->
     <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {% if category == 'error' %}alert-red{% else %}alert-green{% endif %}" style="margin-bottom: 20px;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </main>
 

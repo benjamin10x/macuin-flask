@@ -51,6 +51,7 @@
                     <div class="actions">
                         <a href="{{ url_for('main.editar_autoparte', id=item.id) }}" class="btn-icon btn-edit"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="{{ url_for('main.eliminar_autoparte', id=item.id) }}" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn-icon btn-delete" onclick="return confirm('¿Eliminar esta autoparte?')"><i class="fas fa-trash"></i></button>
                         </form>
                     </div>
